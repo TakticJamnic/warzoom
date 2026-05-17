@@ -1,6 +1,7 @@
 package com.takticjamnic.warzoom.core.map
 
 import com.badlogic.gdx.graphics.Color
+import com.badlogic.gdx.math.Vector2
 import com.takticjamnic.warzoom.core.type.Building
 import com.takticjamnic.warzoom.core.type.Road
 import com.takticjamnic.warzoom.core.type.Tree
@@ -11,8 +12,7 @@ data class WorldMap(
     val trees: MutableList<Tree> = mutableListOf()
 ) {
 
-    var selectedBuilding: Building? = null
-    var selectedRoad: Road? = null
+    val selected = Selected()
 
     companion object {
 
@@ -21,19 +21,15 @@ data class WorldMap(
             val map = WorldMap()
 
             map.buildings += Building(
-                x = -300f,
-                y = -200f,
-                width = 200f,
-                height = 140f,
+                Vector2(-300f, -200f),
+                Vector2(200f, 140f),
                 color = Color.DARK_GRAY,
                 rotation = 70f
             )
 
             map.buildings += Building(
-                x = 100f,
-                y = 100f,
-                width = 120f,
-                height = 220f,
+                Vector2(100f, 100f),
+                Vector2(120f, 220f),
                 color = Color.BROWN,
                 rotation = 60f
             )
@@ -51,13 +47,25 @@ data class WorldMap(
             )
 
             map.trees += Tree(
-                x = 250f,
-                y = -300f,
+                Vector2(250f, -300f),
                 radius = 40f,
                 color = Color.FOREST
             )
 
             return map
         }
+    }
+
+    class Selected {
+        var building: Building? = null
+        var road: Road? = null
+        var tree: Tree? = null
+
+        fun reset() {
+            building = null
+            road = null
+            tree = null
+        }
+
     }
 }

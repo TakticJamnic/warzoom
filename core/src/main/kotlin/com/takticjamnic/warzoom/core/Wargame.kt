@@ -82,20 +82,25 @@ class Wargame : ApplicationAdapter() {
         my: Float,
         worldMap: WorldMap
     ) {
-
-        worldMap.selectedBuilding = null
-        worldMap.selectedRoad = null
+        worldMap.selected.reset()
 
         for (building in worldMap.buildings) {
-            if (building.isSelected(Vector2(mx, my), 20f)) {
-                worldMap.selectedBuilding = building
+            if (building.contains(Vector2(mx, my), 20f)) {
+                worldMap.selected.building = building
+                return
+            }
+        }
+
+        for (tree in worldMap.trees) {
+            if (tree.contains(Vector2(mx, my), 20f)) {
+                worldMap.selected.tree = tree
                 return
             }
         }
 
         for (road in worldMap.roads) {
-            if (road.isSelected(Vector2(mx, my), 20f)) {
-                worldMap.selectedRoad = road
+            if (road.contains(Vector2(mx, my), 20f)) {
+                worldMap.selected.road = road
                 return
             }
         }

@@ -30,10 +30,8 @@ class WorldRenderer(
     }
 
     private fun renderBuildings(worldMap: WorldMap) {
-
         for (building in worldMap.buildings) {
-
-            val selected = worldMap.selectedBuilding?.let {
+            val selected = worldMap.selected.building?.let {
                 it == building
             } ?: false
 
@@ -44,8 +42,8 @@ class WorldRenderer(
             }
 
             shapeRenderer.rect(
-                building.x,
-                building.y,
+                building.position.x,
+                building.position.y,
                 building.width /2,
                 building.height /2,
                 building.width,
@@ -59,11 +57,9 @@ class WorldRenderer(
     }
 
     private fun renderRoads(worldMap: WorldMap) {
-
         for (road in worldMap.roads) {
-
             val pts = road.nodes
-            val selected = worldMap.selectedRoad?.let {
+            val selected = worldMap.selected.road?.let {
                 it == road
             } ?: false
 
@@ -84,14 +80,20 @@ class WorldRenderer(
     }
 
     private fun renderTrees(worldMap: WorldMap) {
-
         for (tree in worldMap.trees) {
+            val selected = worldMap.selected.tree?.let {
+                it == tree
+            } ?: false
 
-            shapeRenderer.color = tree.color
+            shapeRenderer.color = if (selected) {
+                Color.YELLOW
+            } else {
+                tree.color
+            }
 
             shapeRenderer.circle(
-                tree.x,
-                tree.y,
+                tree.position.x,
+                tree.position.y,
                 tree.radius
             )
         }
