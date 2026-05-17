@@ -1,0 +1,6 @@
+/.gradle/
+/.idea/
+/.kotlin/
+/build/
+/core/build/
+/lwjgl13/build/
