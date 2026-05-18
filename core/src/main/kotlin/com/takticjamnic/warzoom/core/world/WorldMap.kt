@@ -1,7 +1,8 @@
-package com.takticjamnic.warzoom.core.map
+package com.takticjamnic.warzoom.core.world
 
 import com.badlogic.gdx.graphics.Color
 import com.badlogic.gdx.math.Vector2
+import com.takticjamnic.warzoom.core.type.Actor
 import com.takticjamnic.warzoom.core.type.Building
 import com.takticjamnic.warzoom.core.type.Road
 import com.takticjamnic.warzoom.core.type.Tree
@@ -9,16 +10,20 @@ import com.takticjamnic.warzoom.core.type.Tree
 data class WorldMap(
     val buildings: MutableList<Building> = mutableListOf(),
     val roads: MutableList<Road> = mutableListOf(),
-    val trees: MutableList<Tree> = mutableListOf()
+    val trees: MutableList<Tree> = mutableListOf(),
+    val actors: MutableList<Actor> = mutableListOf(),
 ) {
 
-    val selected = Selected()
+    val selection = Selection()
 
     companion object {
 
         fun demoMap(): WorldMap {
 
             val map = WorldMap()
+
+            map.actors += Actor(Vector2(0f, 0f), 10f, 120f, Color.BLUE)
+            map.actors += Actor(Vector2(100f, 50f), 10f, 120f, Color.BLUE)
 
             map.buildings += Building(
                 Vector2(-300f, -200f),
@@ -56,16 +61,25 @@ data class WorldMap(
         }
     }
 
-    class Selected {
+    class Selection {
+        val box = Box()
+
         var building: Building? = null
         var road: Road? = null
         var tree: Tree? = null
+        var actors: MutableList<Actor> = mutableListOf()
 
         fun reset() {
             building = null
             road = null
             tree = null
+            actors.clear()
         }
 
+        class Box {
+            var selecting: Boolean = false
+            var start: Vector2 = Vector2(0f, 0f)
+            var end: Vector2 = Vector2(0f, 0f)
+        }
     }
 }

@@ -2,7 +2,7 @@ package com.takticjamnic.warzoom.lwjgl13
 
 import com.badlogic.gdx.backends.lwjgl3.Lwjgl3Application
 import com.badlogic.gdx.backends.lwjgl3.Lwjgl3ApplicationConfiguration
-import com.takticjamnic.warzoom.core.Wargame
+import com.takticjamnic.warzoom.core.WarZoom
 
 object Lwjgl3Launcher {
 
@@ -16,6 +16,6 @@ object Lwjgl3Launcher {
         config.useVsync(true)
         config.setForegroundFPS(144)
 
-        Lwjgl3Application(Wargame(), config)
+        Lwjgl3Application(WarZoom(), config)
     }
 }
