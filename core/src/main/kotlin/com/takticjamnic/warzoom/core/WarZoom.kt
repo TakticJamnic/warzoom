@@ -61,7 +61,7 @@ class WarZoom : ApplicationAdapter() {
 
     private fun update(delta: Float) {
         worldMap.actors.forEach {
-            it.update(delta, worldMap.actors)
+            it.update(delta, worldMap)
         }
     }
 

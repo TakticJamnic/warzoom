@@ -5,13 +5,16 @@ import com.badlogic.gdx.math.Vector2
 import com.takticjamnic.warzoom.core.type.Actor
 import com.takticjamnic.warzoom.core.type.Building
 import com.takticjamnic.warzoom.core.type.Road
+import com.takticjamnic.warzoom.core.type.Squad
 import com.takticjamnic.warzoom.core.type.Tree
+import kotlin.random.Random
 
 data class WorldMap(
     val buildings: MutableList<Building> = mutableListOf(),
     val roads: MutableList<Road> = mutableListOf(),
     val trees: MutableList<Tree> = mutableListOf(),
     val actors: MutableList<Actor> = mutableListOf(),
+    val squads: MutableList<Squad> = mutableListOf(),
 ) {
 
     val selected = Selected()
@@ -22,6 +25,25 @@ data class WorldMap(
         fun demoMap(): WorldMap {
 
             val map = WorldMap()
+
+            val squad = Squad(1)
+
+            repeat(8) {
+
+                val actor = Actor(
+                    Vector2(
+                        Random.nextFloat() * 50f,
+                        Random.nextFloat() * 50f
+                    ), 10f, 120f, 0f, 500f,Color.RED
+                )
+
+                actor.squad = squad
+                squad.actors += actor
+
+                map.actors += actor
+            }
+
+            map.squads += squad
 
             map.actors += Actor(Vector2(0f, 0f), 10f, 120f, 0f, 500f,Color.BLUE)
             map.actors += Actor(Vector2(100f, 50f), 10f, 120f, 0f, 500f, Color.BLUE)

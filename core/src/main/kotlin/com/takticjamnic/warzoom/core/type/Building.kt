@@ -35,4 +35,12 @@ data class Building(
         return localX in -halfW..halfW &&
                 localY in -halfH..halfH
     }
+
+    fun closestPoint(point: Vector2): Vector2 {
+
+        val cx = point.x.coerceIn(position.x, position.x + width)
+        val cy = point.y.coerceIn(position.y, position.y + height)
+
+        return Vector2(cx, cy)
+    }
 }

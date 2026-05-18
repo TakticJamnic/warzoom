@@ -3,13 +3,18 @@ package com.takticjamnic.warzoom.core.world
 import com.badlogic.gdx.Gdx
 import com.badlogic.gdx.Input
 import com.badlogic.gdx.graphics.OrthographicCamera
+import com.badlogic.gdx.graphics.g2d.ParticleEmitter
 import com.badlogic.gdx.math.Vector2
 import com.badlogic.gdx.math.Vector3
+import com.takticjamnic.warzoom.core.type.Actor
+import java.nio.file.Files.move
 import kotlin.math.min
 
 class WorldController {
 
     val tmpRect = com.badlogic.gdx.math.Rectangle()
+    private var lastClickTime = 0L
+    private var lastClickedActor: Actor? = null
 
     fun updateClick(camera: OrthographicCamera, delta: Float, worldMap: WorldMap) {
         if (Gdx.input.isButtonJustPressed(com.badlogic.gdx.Input.Buttons.LEFT)) {
@@ -20,6 +25,8 @@ class WorldController {
             worldMap.selection.selecting = true
             worldMap.selection.start.set(mouse.x, mouse.y)
             worldMap.selection.end.set(mouse.x, mouse.y)
+
+
             select(Vector2(mouse.x, mouse.y), worldMap)
         }
 
@@ -37,7 +44,9 @@ class WorldController {
                 Vector3(Gdx.input.x.toFloat(), Gdx.input.y.toFloat(), 0f)
             )
 
-            move(Vector2(mouse.x, mouse.y), worldMap)
+            val point = Vector2(mouse.x, mouse.y)
+
+            move(point, worldMap)
         }
 
         if (worldMap.selection.selecting) {
@@ -102,7 +111,11 @@ class WorldController {
             worldOffset.mulAdd(right, localX)
             worldOffset.mulAdd(forward, localY)
 
-            actor.target = Vector2(
+            if (!Gdx.input.isKeyPressed(Input.Keys.SHIFT_LEFT)) {
+                actor.path.clear()
+            }
+
+            actor.path += Vector2(
                 point.x + worldOffset.x,
                 point.y + worldOffset.y
             )
@@ -112,9 +125,25 @@ class WorldController {
     private fun select(point: Vector2, worldMap: WorldMap) {
         worldMap.selected.reset()
 
+
         for (actor in worldMap.actors) {
             if (actor.contains(point, 20f)) {
                 worldMap.selected.actors.add(actor)
+
+                val now = System.currentTimeMillis()
+
+                val doubleClick =
+                    lastClickedActor == actor &&
+                            now - lastClickTime < 250
+
+                if (doubleClick) {
+                    actor?.squad?.actors?.forEach { worldMap.selected.actors.add(it) }
+                }
+                else {
+                    worldMap.selected.actors.add(actor)
+                }
+                lastClickTime = now
+                lastClickedActor = actor
                 return
             }
         }

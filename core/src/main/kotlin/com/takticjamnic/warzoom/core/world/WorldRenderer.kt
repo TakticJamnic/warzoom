@@ -4,6 +4,8 @@ import com.badlogic.gdx.graphics.Color
 import com.badlogic.gdx.graphics.OrthographicCamera
 import com.badlogic.gdx.graphics.g2d.SpriteBatch
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer
+import com.badlogic.gdx.scenes.scene2d.ui.Table
+import com.takticjamnic.warzoom.core.type.Actor
 import kotlin.math.abs
 import kotlin.math.min
 
@@ -30,8 +32,34 @@ class WorldRenderer(
         shapeRenderer.end()
 
         renderSelectionBox(worldMap)
+
     }
 
+    fun renderPath(actor: Actor) {
+
+        if (actor.path.isEmpty()) return
+
+        shapeRenderer.color = Color.CYAN
+
+        var previous = actor.position
+
+        for (point in actor.path) {
+
+            shapeRenderer.rectLine(
+                previous,
+                point,
+                2f
+            )
+
+            shapeRenderer.circle(
+                point.x,
+                point.y,
+                4f
+            )
+
+            previous = point
+        }
+    }
     private fun renderBuildings(worldMap: WorldMap) {
         for (building in worldMap.buildings) {
             val selected = worldMap.selected.building?.let {
@@ -129,6 +157,11 @@ class WorldRenderer(
                 actor.position.y + dirY * 14f,
                 2f
             )
+
+
+            if (selected) {
+                renderPath(actor)
+            }
         }
     }
 
