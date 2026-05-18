@@ -14,6 +14,7 @@ data class WorldMap(
     val actors: MutableList<Actor> = mutableListOf(),
 ) {
 
+    val selected = Selected()
     val selection = Selection()
 
     companion object {
@@ -22,8 +23,12 @@ data class WorldMap(
 
             val map = WorldMap()
 
-            map.actors += Actor(Vector2(0f, 0f), 10f, 120f, Color.BLUE)
-            map.actors += Actor(Vector2(100f, 50f), 10f, 120f, Color.BLUE)
+            map.actors += Actor(Vector2(0f, 0f), 10f, 120f, 0f, 500f,Color.BLUE)
+            map.actors += Actor(Vector2(100f, 50f), 10f, 120f, 0f, 500f, Color.BLUE)
+            map.actors += Actor(Vector2(150f, 50f), 10f, 120f, 0f, 500f, Color.BLUE)
+            map.actors += Actor(Vector2(200f, 50f), 10f, 120f, 0f, 500f, Color.BLUE)
+            map.actors += Actor(Vector2(-50f, 50f), 10f, 120f, 0f, 500f, Color.BLUE)
+            map.actors += Actor(Vector2(-100f, 50f), 10f, 120f, 0f, 500f, Color.BLUE)
 
             map.buildings += Building(
                 Vector2(-300f, -200f),
@@ -61,9 +66,7 @@ data class WorldMap(
         }
     }
 
-    class Selection {
-        val box = Box()
-
+    class Selected {
         var building: Building? = null
         var road: Road? = null
         var tree: Tree? = null
@@ -76,10 +79,11 @@ data class WorldMap(
             actors.clear()
         }
 
-        class Box {
-            var selecting: Boolean = false
-            var start: Vector2 = Vector2(0f, 0f)
-            var end: Vector2 = Vector2(0f, 0f)
-        }
+    }
+
+    class Selection {
+        var selecting: Boolean = false
+        var start: Vector2 = Vector2(0f, 0f)
+        var end: Vector2 = Vector2(0f, 0f)
     }
 }
